@@ -11,7 +11,6 @@ Bundle 'gmarik/vundle'
 
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Raimondi/delimitMate'
-"Bundle 'altercation/vim-colors-solarized'
 Bundle 'cgraeser/vim-cmdpathup'
 Bundle 'drmingdrmer/xptemplate'
 Bundle 'ervandew/supertab'
@@ -20,7 +19,7 @@ Bundle 'godlygeek/tabular'
 Bundle 'kana/vim-arpeggio'
 Bundle 'kien/ctrlp.vim'
 Bundle 'kien/rainbow_parentheses.vim'
-Bundle 'kien/tabman.vim'
+"Bundle 'kien/tabman.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'mattn/zencoding-vim'
 Bundle 'mileszs/ack.vim'
@@ -31,6 +30,21 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-surround'
 "Bundle 'trapd00r/neverland-vim-theme'
 "Bundle 'tyshen/snipmate.vim'
+
+"colorscheme
+Bundle 'desert256.vim'
+Bundle 'desertEx'
+Bundle 'ciaranm/inkpot'
+Bundle 'Xoria256m'
+Bundle 'xoria256.vim'
+Bundle 'burnttoast256'
+Bundle 'Railscasts-Theme-GUIand256color'
+Bundle 'railscasts'
+Bundle 'rickharris/vim-monokai'
+Bundle 'tomasr/molokai'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'xterm16.vim'
+Bundle 'nanotech/jellybeans.vim'
 
 " vim-scripts repos
 Bundle 'CRefVim'
@@ -94,17 +108,13 @@ if has("gui_running")
   "colorscheme railscasts
   colorscheme monokai
 else
-  if(&t_Co == 8) 
+  if(&t_Co == 88)
     colorscheme desertEx
   else
     "set background=dark "for peaksea color scheme
-    "colorscheme mywombat256
     "colorscheme desert256
-    "colorscheme twilight256
     "colorscheme desert-warm-256
-    "colorscheme 256-grayvim
     "colorscheme desertEx 
-    "colorscheme deveiate 
     "colorscheme inkpot 
     "colorscheme railscasts 
     "colorscheme monokai
