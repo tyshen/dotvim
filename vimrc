@@ -15,7 +15,7 @@ Bundle 'cgraeser/vim-cmdpathup'
 Bundle 'drmingdrmer/xptemplate'
 Bundle 'ervandew/supertab'
 Bundle 'godlygeek/tabular'
-"Bundle 'jpalardy/vim-slime'
+Bundle 'jpalardy/vim-slime'
 Bundle 'kana/vim-arpeggio'
 Bundle 'kien/ctrlp.vim'
 Bundle 'kien/rainbow_parentheses.vim'
@@ -31,6 +31,12 @@ Bundle 'tpope/vim-surround'
 "Bundle 'trapd00r/neverland-vim-theme'
 "Bundle 'tyshen/snipmate.vim'
 
+"powerline slow down vim startup
+"Bundle 'Lokaltog/vim-powerline'
+"Bundle 'yesmeck/tips.vim'
+Bundle 'automatic-for-Verilog'
+"Bundle 'kshenoy/vim-signature'
+
 "colorscheme
 Bundle 'desert256.vim'
 Bundle 'desertEx'
@@ -45,6 +51,7 @@ Bundle 'tomasr/molokai'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'xterm16.vim'
 Bundle 'nanotech/jellybeans.vim'
+Bundle 'nielsmadan/harlequin'
 
 " vim-scripts repos
 Bundle 'CRefVim'
@@ -52,22 +59,27 @@ Bundle 'EasyGrep'
 Bundle 'IndexedSearch'
 Bundle 'OmniCppComplete'
 Bundle 'QuickBuf'
-Bundle 'ShowMarks'
+"Bundle 'ShowMarks'
 Bundle 'VisIncr'
 Bundle 'a.vim'
 Bundle 'camelcasemotion'
-Bundle 'cscope.vim'
+"Bundle 'cscope.vim'
+Bundle 'cscope_macros.vim'
 Bundle 'errormarker.vim'
-Bundle 'verilog_systemverilog.vim'
+"Bundle 'verilog_systemverilog.vim'
 Bundle 'textobj-user'
 Bundle 'VimOutliner'
+Bundle 'xptemplatecustomize'
+Bundle 'vimwiki'
+
+"Bundle 'glts/vim-spacebox'
 
 filetype plugin indent on     " required!
 " or 
 " filetype plugin on          " to not use the indentation settings set by plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-runtime macros/matchit.vim
+    runtime macros/matchit.vim
 "copy from /etc/vimrc for some common setting
 if has("unix")
     if(findfile("vimrc","/etc/")!="")
@@ -117,9 +129,9 @@ else
     "colorscheme desertEx 
     "colorscheme inkpot 
     "colorscheme railscasts 
-    "colorscheme monokai
-    "colorscheme molokai
-    colorscheme xoria256
+   "" colorscheme monokai
+    colorscheme molokai
+    "colorscheme xoria256
     "colorscheme burnttoast256
   endif
 endif
@@ -132,7 +144,9 @@ hi TabLineSel cterm=bold ctermbg=4
 if has("gui_running")
   "set font
   if has("unix")
-    set guifont=Monospace\ 14
+    "set guifont=Monospace\ 14
+    "set guifont=Monaco\ 14
+    set guifont=Monaco\ for\ powerline\ 14
     "exceed work slowly in Monospace font
     "set guifont=Fixed\ 14 
 
@@ -391,6 +405,7 @@ if has("multi_byte")
   set fileencodings=latin1,ucs-bom,utf-8,big5
   "with termencoding, vim can read utf8 file and translate to termencoding(cp950). Then putty/screen can read with cp950(big5) without config as utf8
   "set termencoding=cp950
+  "set encoding=utf-8
 endif
 
 "Smart way to move btw. windows
@@ -759,3 +774,7 @@ imap <C-e> <End>
 imap <C-q> <Esc>
 imap <C-d> <Delete>
 
+set laststatus=2
+let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
+"let g:Powerline_symbols = 'fancy'
+let g:Powerline_cache_enabled = 0
