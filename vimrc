@@ -68,7 +68,6 @@ Bundle 'cscope_macros.vim'
 Bundle 'errormarker.vim'
 "Bundle 'verilog_systemverilog.vim'
 Bundle 'textobj-user'
-Bundle 'VimOutliner'
 Bundle 'xptemplatecustomize'
 Bundle 'vimwiki'
 
