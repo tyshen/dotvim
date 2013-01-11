@@ -12,29 +12,30 @@ Bundle 'gmarik/vundle'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Raimondi/delimitMate'
 Bundle 'cgraeser/vim-cmdpathup'
-Bundle 'drmingdrmer/xptemplate'
+"Bundle 'drmingdrmer/xptemplate'
 Bundle 'ervandew/supertab'
 Bundle 'godlygeek/tabular'
-Bundle 'jpalardy/vim-slime'
-Bundle 'kana/vim-arpeggio'
+"Bundle 'jpalardy/vim-slime'
+"Bundle 'kana/vim-arpeggio'
 Bundle 'kien/ctrlp.vim'
 Bundle 'kien/rainbow_parentheses.vim'
 "Bundle 'kien/tabman.vim'
 Bundle 'majutsushi/tagbar'
-Bundle 'mattn/zencoding-vim'
-Bundle 'mileszs/ack.vim'
-Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'plasticboy/vim-markdown'
+"Bundle 'mattn/zencoding-vim'
+"Bundle 'mileszs/ack.vim'
+"Bundle 'nathanaelkane/vim-indent-guides'
+"Bundle 'plasticboy/vim-markdown'
 Bundle 'rainux/vim-desert-warm-256'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-surround'
 "Bundle 'trapd00r/neverland-vim-theme'
-"Bundle 'tyshen/snipmate.vim'
+Bundle 'tyshen/snipmate.vim'
+"Bundle 'sjl/gundo.vim'
+"Bundle 'YankRing.vim'
 
 "powerline slow down vim startup
 "Bundle 'Lokaltog/vim-powerline'
 "Bundle 'yesmeck/tips.vim'
-Bundle 'automatic-for-Verilog'
 "Bundle 'kshenoy/vim-signature'
 
 "colorscheme
@@ -62,17 +63,19 @@ Bundle 'QuickBuf'
 "Bundle 'ShowMarks'
 Bundle 'VisIncr'
 Bundle 'a.vim'
-Bundle 'camelcasemotion'
+"Bundle 'camelcasemotion'
 "Bundle 'cscope.vim'
 Bundle 'cscope_macros.vim'
 Bundle 'errormarker.vim'
-"Bundle 'verilog_systemverilog.vim'
+Bundle 'verilog_systemverilog_fix'
 Bundle 'textobj-user'
-Bundle 'xptemplatecustomize'
+"Bundle 'xptemplatecustomize'
 Bundle 'vimwiki'
+"Bundle 'gprof.vim'
 
 "Bundle 'glts/vim-spacebox'
 
+Bundle 'pyclewn'
 filetype plugin indent on     " required!
 " or 
 " filetype plugin on          " to not use the indentation settings set by plugins
@@ -157,7 +160,7 @@ if has("gui_running")
   "Omni menu colors
   hi Pmenu guibg=#333333
   hi PmenuSel guibg=#555555 guifg=#ffffff
-  "set guioptions-=T
+  set guioptions-=T
 
 endif
 
@@ -337,21 +340,14 @@ set wildmenu
 "
 "integrated compiler
 "filter out warning from bt. ONLY FOR SPS ENV
-"command Makeb :set makeprg=makeb\\\|\&sed\ \"\/invalid\ offsetof\ from\/d;\/daSigIP_MethodArgument_S\/d\"
-"command Makei :set makeprg=makei\\\|\&sed\ \"\/invalid\ offsetof\ from\/d;\/daSigIP_MethodArgument_S\/d\"
-"command Makep :set makeprg=makep\\\|\&sed\ \"\/invalid\ offsetof\ from\/d;\/daSigIP_MethodArgument_S\/d\"
-"command Maken :set makeprg=make\\\|\&sed\ \"\/invalid\ offsetof\ from\/d;\/daSigIP_MethodArgument_S\/d\"
 function SPSmakecmd(type)
-    let l:orgcmd=&makeprg
-    execute 'set makeprg=' . a:type . '\\\|\&sed\ \"\/invalid\ offsetof\ from\/d;\/daSigIP_MethodArgument_S\/d\"'
+    "let l:orgcmd=&makeprg
+    execute 'set makeprg=make' . a:type . '\\\|\&sed\ \"\/invalid\ offsetof\ from\/d;\/daSigIP_MethodArgument_S\/d\"'
     make
     "recovery original setting when need
     "execute 'set makeprg='.escape(l:orgcmd,' /|&"\')
 endfunction
-command Makeb call SPSmakecmd("makeb")
-command Makei call SPSmakecmd("makei")
-command Makep call SPSmakecmd("makep")
-command Makeg call SPSmakecmd("makeg")
+command -nargs=1 Make call SPSmakecmd(<f-args>)
 map <F8> <ESC>:cd %:h<CR>:make<CR>
 "if v:version >= 700
 "Makeb
@@ -529,6 +525,8 @@ endif
 ":%s/\i\+/&/g
 "count char
 ":%s/./&/g
+"find module in verilog
+":map <F6> ma?^\s*\<module\><CR>Wyiw'a:echo "module -->" @0<CR>
 "================================================================================
 
 
@@ -698,7 +696,7 @@ let python_highlight_all= 1
 
 "NERD_tree key map
 map <F10> :NERDTreeToggle<cr>
-map ,n <ESC>:NERDTreeToggle<cr>
+map ,n <ESC>:NERDTreeFind<cr>
 let g:NERDTreeIgnore = ['\~$','\.o$','\.moc.cpp$','_bf_ckcancel$','^CVS$']
 let g:NERDTreeWinSize = 20
 let g:NERDTreeDirArrows=0
@@ -706,6 +704,7 @@ let g:NERDTreeDirArrows=0
 "SuperTab
 "let g:SuperTabMappingForward = '<c-tab>'
 "let g:SuperTabMappingBackward = '<tab>'
+let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
 "
 "myprojects
 let g:myprojects_auto_open=0
@@ -756,7 +755,7 @@ let g:rbpt_colorpairs = [
 			\ ]
 
 "Arpeggio
-call arpeggio#map('i', '', 0, 'jk','<esc>')
+"call arpeggio#map('i', '', 0, 'jk','<esc>')
 
 "errormarker
 let g:errormarker_disablemappings = 1
@@ -777,3 +776,6 @@ set laststatus=2
 let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
 "let g:Powerline_symbols = 'fancy'
 let g:Powerline_cache_enabled = 0
+
+"vimwiki
+nmap <leader>tt <Plug>VimwikiToggleListItem
