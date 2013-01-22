@@ -36,7 +36,7 @@ Bundle 'tyshen/snipmate.vim'
 "powerline slow down vim startup
 "Bundle 'Lokaltog/vim-powerline'
 "Bundle 'yesmeck/tips.vim'
-"Bundle 'kshenoy/vim-signature'
+Bundle 'kshenoy/vim-signature'
 
 "colorscheme
 Bundle 'desert256.vim'
@@ -587,7 +587,7 @@ let g:qb_hotkey = ",,"
 
 "ctrlp.vim
 let g:ctrlp_by_filename = 1
-let g:ctrlp_map = ',f'
+"let g:ctrlp_map = ',f'
 let g:ctrlp_jump_to_buffer = 2
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_follow_symlinks = 1
@@ -704,7 +704,7 @@ let g:NERDTreeDirArrows=0
 "SuperTab
 "let g:SuperTabMappingForward = '<c-tab>'
 "let g:SuperTabMappingBackward = '<tab>'
-let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
+"let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
 "
 "myprojects
 let g:myprojects_auto_open=0
@@ -761,10 +761,11 @@ let g:rbpt_colorpairs = [
 let g:errormarker_disablemappings = 1
 
 "emacs style keymap for inster mode
-imap <C-b> <Left>
-imap <C-n> <Down>
-imap <C-p> <Up>
-imap <C-f> <Right>
+"imap <C-b> <Left>
+"<c-n> conflit with supertab
+"imap <C-n> <Down>
+"imap <C-p> <Up>
+"imap <C-f> <Right>
 imap <C-v> <PageDown>
 imap <M-v> <PageUp>
 imap <C-a> <Home>
@@ -773,7 +774,7 @@ imap <C-q> <Esc>
 imap <C-d> <Delete>
 
 set laststatus=2
-let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
+"let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
 "let g:Powerline_symbols = 'fancy'
 let g:Powerline_cache_enabled = 0
 
