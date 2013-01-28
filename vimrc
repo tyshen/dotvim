@@ -24,10 +24,12 @@ Bundle 'majutsushi/tagbar'
 "Bundle 'mattn/zencoding-vim'
 "Bundle 'mileszs/ack.vim'
 "Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'Yggdroot/indentLine'
 "Bundle 'plasticboy/vim-markdown'
 Bundle 'rainux/vim-desert-warm-256'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-rsi'
 "Bundle 'trapd00r/neverland-vim-theme'
 Bundle 'tyshen/snipmate.vim'
 "Bundle 'sjl/gundo.vim'
@@ -53,6 +55,8 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'xterm16.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'nielsmadan/harlequin'
+"text objects for blocks of indentation whitespace 
+Bundle 'glts/vim-textobj-indblock'
 
 " vim-scripts repos
 Bundle 'CRefVim'
@@ -597,9 +601,9 @@ let g:ctrlp_extensions = ['dir']
 "let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files']
 let g:ctrlp_custom_ignore = '\(\.o\|\.moc\.cpp\|\.a\|\.bak\|\.swp\|CVS\|\.git\|\.hg\|\.lib++\)$\|/inc/\|/lib/\|/GEMINIDB/'
 nmap <silent> ,m :CtrlPBuffer<CR>
-nmap <silent> ,or :CtrlP $PROD_ROOT/protoProd/src/rp<CR>
 nmap <silent> ,om :CtrlP $PROD_ROOT/protoProd/src/hdlmod<CR>
-nmap <silent> ,plcom :CtrlP $PROD_ROOT/share/src/flCompilePrePar<CR>
+nmap <silent> ,od :CtrlP $PROD_ROOT/protoProd/src/instr/dpiinstr<CR>
+nmap <silent> ,os :CtrlP $PROD_ROOT/share/src/SceMi<CR>
 
 "================================================================================
 "setting for tabber plugin not used now
@@ -759,24 +763,6 @@ let g:rbpt_colorpairs = [
 
 "errormarker
 let g:errormarker_disablemappings = 1
-
-"emacs style keymap for inster mode
-"imap <C-b> <Left>
-"<c-n> conflit with supertab
-"imap <C-n> <Down>
-"imap <C-p> <Up>
-"imap <C-f> <Right>
-imap <C-v> <PageDown>
-imap <M-v> <PageUp>
-imap <C-a> <Home>
-imap <C-e> <End>
-imap <C-q> <Esc>
-imap <C-d> <Delete>
-
-set laststatus=2
-"let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
-"let g:Powerline_symbols = 'fancy'
-let g:Powerline_cache_enabled = 0
 
 "vimwiki
 nmap <leader>tt <Plug>VimwikiToggleListItem
