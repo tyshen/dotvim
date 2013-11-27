@@ -11,22 +11,23 @@ Bundle 'gmarik/vundle'
 
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Raimondi/delimitMate'
-Bundle 'cgraeser/vim-cmdpathup'
+"Bundle 'cgraeser/vim-cmdpathup'
 "Bundle 'drmingdrmer/xptemplate'
 Bundle 'ervandew/supertab'
 Bundle 'godlygeek/tabular'
+Bundle 'junegunn/vim-easy-align'
 "Bundle 'jpalardy/vim-slime'
-"Bundle 'kana/vim-arpeggio'
 Bundle 'kien/ctrlp.vim'
 Bundle 'kien/rainbow_parentheses.vim'
 "Bundle 'kien/tabman.vim'
 Bundle 'majutsushi/tagbar'
+Bundle 'ivalkeen/vim-ctrlp-tjump'
 "Bundle 'mattn/zencoding-vim'
 "Bundle 'mileszs/ack.vim'
-"Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'Yggdroot/indentLine'
+Bundle 'epmatsw/ag.vim'
+Bundle 'nathanaelkane/vim-indent-guides'
+"Bundle 'Yggdroot/indentLine'
 "Bundle 'plasticboy/vim-markdown'
-Bundle 'rainux/vim-desert-warm-256'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-rsi'
@@ -34,36 +35,57 @@ Bundle 'tpope/vim-rsi'
 Bundle 'tyshen/snipmate.vim'
 "Bundle 'sjl/gundo.vim'
 "Bundle 'YankRing.vim'
+"Bundle 'mihaifm/vimpanel'
+Bundle 'terryma/vim-expand-region'
+"Bundle 'mhinz/vim-signify'
+"Bundle 'Valloric/YouCompleteMe'
 
-"powerline slow down vim startup
-"Bundle 'Lokaltog/vim-powerline'
+Bundle 'bling/vim-airline'
+if has("gui_running") 
+    let g:airline_powerline_fonts=1
+    set enc=utf-8
+else
+    let g:airline_left_sep=''
+    let g:airline_right_sep=''
+endif
+set laststatus=2   " Always show the statusline
+let g:airline#extensions#branch#enabled = 0 
+let g:airline#extensions#csv#enabled = 0
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#hunks#non_zero_only = 0 
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#virtualenv#enabled = 0
+let g:airline#extensions#syntastic#enabled = 0
+"airline tagbar has performance issue
+let g:airline#extensions#tagbar#enabled = 0
+
+
 "Bundle 'yesmeck/tips.vim'
 Bundle 'kshenoy/vim-signature'
+"Bundle 'terryma/vim-multiple-cursors'
+
+"Bundle 'khorser/vim-repl'
+"Bundle 'Shougo/vimproc'
+Bundle 'prendradjaja/vim-vertigo'
 
 "colorscheme
 Bundle 'desert256.vim'
 Bundle 'desertEx'
 Bundle 'ciaranm/inkpot'
-Bundle 'Xoria256m'
-Bundle 'xoria256.vim'
-Bundle 'burnttoast256'
-Bundle 'Railscasts-Theme-GUIand256color'
-Bundle 'railscasts'
-Bundle 'rickharris/vim-monokai'
+Bundle 'sickill/vim-monokai'
 Bundle 'tomasr/molokai'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'xterm16.vim'
-Bundle 'nanotech/jellybeans.vim'
-Bundle 'nielsmadan/harlequin'
+
 "text objects for blocks of indentation whitespace 
-Bundle 'glts/vim-textobj-indblock'
+"Bundle 'glts/vim-textobj-indblock'
+"Bundle 'mihaifm/bck'
 
 " vim-scripts repos
-Bundle 'CRefVim'
-Bundle 'EasyGrep'
+"Bundle 'CRefVim'
+"Bundle 'EasyGrep'
 Bundle 'IndexedSearch'
-Bundle 'OmniCppComplete'
+"Bundle 'OmniCppComplete'
 Bundle 'QuickBuf'
+Bundle 'mihaifm/bufstop'
 "Bundle 'ShowMarks'
 Bundle 'VisIncr'
 Bundle 'a.vim'
@@ -79,7 +101,7 @@ Bundle 'vimwiki'
 
 "Bundle 'glts/vim-spacebox'
 
-Bundle 'pyclewn'
+"Bundle 'pyclewn'
 filetype plugin indent on     " required!
 " or 
 " filetype plugin on          " to not use the indentation settings set by plugins
@@ -122,25 +144,15 @@ if !has("gui_running")
 endif
 
 "set color scheme 
-if has("gui_running")
-  "colorscheme railscasts
-  colorscheme monokai
-else
+"if has("gui_running")
+"  colorscheme molokai
+"else
   if(&t_Co == 88)
     colorscheme desertEx
   else
-    "set background=dark "for peaksea color scheme
-    "colorscheme desert256
-    "colorscheme desert-warm-256
-    "colorscheme desertEx 
-    "colorscheme inkpot 
-    "colorscheme railscasts 
-   "" colorscheme monokai
     colorscheme molokai
-    "colorscheme xoria256
-    "colorscheme burnttoast256
   endif
-endif
+"endif
 
 "set highit cursor line
 set cursorline
@@ -151,8 +163,8 @@ if has("gui_running")
   "set font
   if has("unix")
     "set guifont=Monospace\ 14
-    "set guifont=Monaco\ 14
-    set guifont=Monaco\ for\ powerline\ 14
+    "set guifont=Monaco\ 12
+    set guifont=Monaco\ for\ powerline\ 12
     "exceed work slowly in Monospace font
     "set guifont=Fixed\ 14 
 
@@ -201,75 +213,77 @@ cnoremap <C-F4> <C-C>:tabc
 "au BufAdd,BufNewFile,BufRead * nested tab sball
 
 "set tab page header label and color
-function MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let label = ''
-
-  " Add '+' if one of the buffers in the tab page is modified
-  if getbufvar(buflist[winnr - 1], "&modified")
-    let label = '+'
-  endif
-
-  return label . substitute(bufname(buflist[winnr - 1]),".*/","","g") "show file name only
-endfunction
-
-function MyTabLine()
-  let s = ''
-  for i in range(tabpagenr('$'))
-    " select the highlighting
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
-    else
-      let s .= '%#TabLine#'
-    endif
-
-    " set the tab page number (for mouse clicks)
-    let s .= '%' . (i + 1) . 'T'
-
-    " the label is made by MyTabLabel()
-    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-
-  " after the last tab fill with TabLineFill and reset tab page nr
-  let s .= '%#TabLineFill#%T'
-
-  return s
-endfunction
-
-set tabline=%!MyTabLine()
-
-
-function GuiTabLabel()
-  let label = ''
-  let bufnrlist = tabpagebuflist(v:lnum)
-
-  " Add '+' if one of the buffers in the tab page is modified
-  for bufnr in bufnrlist
-    if getbufvar(bufnr, "&modified")
-      let label = '+'
-      break
-    endif
-  endfor
-
-  " Append the number of windows in the tab page if more than one
-  let wincount = tabpagewinnr(v:lnum, '$')
-  if wincount > 1
-    let label .= wincount
-  endif
-  if label != ''
-    let label .= ' '
-  endif
-
-  " Append the buffer name
-  return label .  substitute(bufname(bufnrlist[tabpagewinnr(v:lnum) - 1]),".*/","","g") 
-endfunction
-set guitablabel=%{GuiTabLabel()}
+"function MyTabLabel(n)
+"  let buflist = tabpagebuflist(a:n)
+"  let winnr = tabpagewinnr(a:n)
+"  let label = ''
+"
+"  " Add '+' if one of the buffers in the tab page is modified
+"  if getbufvar(buflist[winnr - 1], "&modified")
+"    let label = '+'
+"  endif
+"
+"  return label . substitute(bufname(buflist[winnr - 1]),".*/","","g") "show file name only
+"endfunction
+"
+"function MyTabLine()
+"  let s = ''
+"  for i in range(tabpagenr('$'))
+"    " select the highlighting
+"    if i + 1 == tabpagenr()
+"      let s .= '%#TabLineSel#'
+"    else
+"      let s .= '%#TabLine#'
+"    endif
+"
+"    " set the tab page number (for mouse clicks)
+"    let s .= '%' . (i + 1) . 'T'
+"
+"    " the label is made by MyTabLabel()
+"    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+"  endfor
+"
+"  " after the last tab fill with TabLineFill and reset tab page nr
+"  let s .= '%#TabLineFill#%T'
+"
+"  return s
+"endfunction
+"
+"set tabline=%!MyTabLine()
+"
+"
+"function GuiTabLabel()
+"  let label = ''
+"  let bufnrlist = tabpagebuflist(v:lnum)
+"
+"  " Add '+' if one of the buffers in the tab page is modified
+"  for bufnr in bufnrlist
+"    if getbufvar(bufnr, "&modified")
+"      let label = '+'
+"      break
+"    endif
+"  endfor
+"
+"  " Append the number of windows in the tab page if more than one
+"  let wincount = tabpagewinnr(v:lnum, '$')
+"  if wincount > 1
+"    let label .= wincount
+"  endif
+"  if label != ''
+"    let label .= ' '
+"  endif
+"
+"  " Append the buffer name
+"  return label .  substitute(bufname(bufnrlist[tabpagewinnr(v:lnum) - 1]),".*/","","g") 
+"endfunction
+"set guitablabel=%{GuiTabLabel()}
 
 "Enable use of the mouse.
 "this setting will cause some problem in scroll back(mouse wheel) of screen
-if($term!="screen")
-  set mouse=a
+if($term!="^screen")
+  set mouse+=a
+  " tmux knows the extended mouse mode
+  set ttymouse=xterm2
 endif
 
 else ""//v:version >= 700
@@ -292,9 +306,6 @@ endif
 "if filereadable("~/util/tagfile/${branch}tags")
 "  set tags+=~/util/tagfile/${branch}tags
 "endif
-if filereadable("tags")
-  set tags+=./tags
-endif
 command Csadd :cs add ~/util/tagfile/plcscope ~/LINUX/fle2
 function Lxr()
     set cscopeprg=lxrtag
@@ -401,7 +412,7 @@ nmap <s-tab> V<
 "setting file encoding to search multiple encoding when support
 if has("multi_byte")
   "set bomb
-  set fileencodings=latin1,ucs-bom,utf-8,big5
+  set fileencodings=latin1,ucs-bom,utf-8,big5,cp936
   "with termencoding, vim can read utf8 file and translate to termencoding(cp950). Then putty/screen can read with cp950(big5) without config as utf8
   "set termencoding=cp950
   "set encoding=utf-8
@@ -552,7 +563,7 @@ let Tlist_GainFocus_On_ToggleOpen = 1
 let Tlist_Show_One_File = 1
 let Tlist_Use_Right_Window=1
 map ,t <ESC>:TagbarToggle<cr>
-
+let g:tagbar_ctags_bin = '~/util/bin/ctags'
 "================================================================================
 "Project plugin
 let g:proj_flags="sgLmc"
@@ -560,7 +571,7 @@ map ,p <F12>
 
 "================================================================================
 "setting for Shell.vim plugin
-let g:PROMPT=">"
+"let g:PROMPT=">"
 
 "================================================================================
 "setting for file-explorer plugin
@@ -601,51 +612,51 @@ let g:ctrlp_extensions = ['dir']
 "let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files']
 let g:ctrlp_custom_ignore = '\(\.o\|\.moc\.cpp\|\.a\|\.bak\|\.swp\|CVS\|\.git\|\.hg\|\.lib++\)$\|/inc/\|/lib/\|/GEMINIDB/'
 nmap <silent> ,m :CtrlPBuffer<CR>
-nmap <silent> ,om :CtrlP $PROD_ROOT/protoProd/src/hdlmod<CR>
-nmap <silent> ,od :CtrlP $PROD_ROOT/protoProd/src/instr/dpiinstr<CR>
-nmap <silent> ,os :CtrlP $PROD_ROOT/share/src/SceMi<CR>
+com CPmod CtrlP $PROD_ROOT/protoProd/src/hdlmod<CR>
+com CPdpi CtrlP $PROD_ROOT/protoProd/src/instr/dpiinstr<CR>
+com CPchip CtrlP $PROD_ROOT/protoProd/src/instr/chipinstr<CR>
 
 "================================================================================
 "setting for tabber plugin not used now
-let Tb_loaded= 1 " disable TabBar plugin
-if exists('Tb_loaded') "tabbar was disabled then use my own tabpage hotkey
-  " CTRL+d is close tab
-  "nmap <C-D> :tabc<CR>
-  if !has("gui_running")
-    "configure for terminal
-    map <unique> 1 <ESC>1gt
-    map <unique> 2 <ESC>2gt
-    map <unique> 3 <ESC>3gt
-    map <unique> 4 <ESC>4gt
-    map <unique> 5 <ESC>5gt
-    map <unique> 6 <ESC>6gt
-    map <unique> 7 <ESC>7gt
-    map <unique> 8 <ESC>8gt
-    map <unique> 9 <ESC>9gt
-  else 
-    " configure for gvim 
-    map <unique> <M-1> 1gt
-    map <unique> <M-2> 2gt
-    map <unique> <M-3> 3gt
-    map <unique> <M-4> 4gt
-    map <unique> <M-5> 5gt
-    map <unique> <M-6> 6gt
-    map <unique> <M-7> 7gt
-    map <unique> <M-8> 8gt
-    map <unique> <M-9> 9gt
-  endif
-else
-  " CTRL+d is close tab
-  noremap <unique> <C-D> :bd<CR>
-  "force TabBar to try to place selected buffers into a window that does not have a nonmodifiable buffer.
-  "let g:Tb_ModSelTarget = 1
-  ""Put new window below current or on the  right for vertical split
-  ""let g:Tb_SplitBelow=1 
-  "let g:Tb_MoreThanOne=2
-  "let g:Tb_UseSingleClick = 1
-  "let g:Tb_AutoUpdt = 0
-  "map <F9> <ESC>:TbToggle<CR>
-endif 
+"let Tb_loaded= 1 " disable TabBar plugin
+"if exists('Tb_loaded') "tabbar was disabled then use my own tabpage hotkey
+"  " CTRL+d is close tab
+"  "nmap <C-D> :tabc<CR>
+"  if !has("gui_running")
+"    "configure for terminal
+"    map <unique> 1 <ESC>1gt
+"    map <unique> 2 <ESC>2gt
+"    map <unique> 3 <ESC>3gt
+"    map <unique> 4 <ESC>4gt
+"    map <unique> 5 <ESC>5gt
+"    map <unique> 6 <ESC>6gt
+"    map <unique> 7 <ESC>7gt
+"    map <unique> 8 <ESC>8gt
+"    map <unique> 9 <ESC>9gt
+"  else 
+"    " configure for gvim 
+"    map <unique> <M-1> 1gt
+"    map <unique> <M-2> 2gt
+"    map <unique> <M-3> 3gt
+"    map <unique> <M-4> 4gt
+"    map <unique> <M-5> 5gt
+"    map <unique> <M-6> 6gt
+"    map <unique> <M-7> 7gt
+"    map <unique> <M-8> 8gt
+"    map <unique> <M-9> 9gt
+"  endif
+"else
+"  " CTRL+d is close tab
+"  noremap <unique> <C-D> :bd<CR>
+"  "force TabBar to try to place selected buffers into a window that does not have a nonmodifiable buffer.
+"  "let g:Tb_ModSelTarget = 1
+"  ""Put new window below current or on the  right for vertical split
+"  ""let g:Tb_SplitBelow=1 
+"  "let g:Tb_MoreThanOne=2
+"  "let g:Tb_UseSingleClick = 1
+"  "let g:Tb_AutoUpdt = 0
+"  "map <F9> <ESC>:TbToggle<CR>
+"endif 
 ""================================================================================
 "setting for MiniBufExplorer it has problem on cowork with project plugin
 "Put new window below current or on the right for vertical split
@@ -684,11 +695,11 @@ endif
 
 "================================================================================
 "jQuery Syntax file
-au BufRead,BufNewFile *.js set ft=javascript.jquery
+"au BufRead,BufNewFile *.js set ft=javascript.jquery
 
 "================================================================================
 "sienna colorscheme
-let g:sienna_style = 'dark' " dark or light
+"let g:sienna_style = 'dark' " dark or light
 
 "CSApprox
 "disable plugin only enable when need. Enable CSApprox by comment option 
@@ -699,8 +710,8 @@ let g:sienna_style = 'dark' " dark or light
 let python_highlight_all= 1
 
 "NERD_tree key map
-map <F10> :NERDTreeToggle<cr>
-map ,n <ESC>:NERDTreeFind<cr>
+map ,n :NERDTreeToggle<cr>
+map <F10> <ESC>:NERDTreeFind<cr>
 let g:NERDTreeIgnore = ['\~$','\.o$','\.moc.cpp$','_bf_ckcancel$','^CVS$']
 let g:NERDTreeWinSize = 20
 let g:NERDTreeDirArrows=0
@@ -711,12 +722,12 @@ let g:NERDTreeDirArrows=0
 "let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
 "
 "myprojects
-let g:myprojects_auto_open=0
-let g:myprojects_syntax =0
-let g:myprojects_cursorline=0
+"let g:myprojects_auto_open=0
+"let g:myprojects_syntax =0
+"let g:myprojects_cursorline=0
 
 "showmarks
-let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
+"let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
 
 "mark multiple 
 map <Leader>cm <Plug>MarkClear
@@ -737,6 +748,7 @@ map <Leader>cm <Plug>MarkClear
 "
 "Easymotion
 let g:EasyMotion_leader_key='.'
+let g:EasyMotion_keys='abcdefghijklmnopqrstuvwzyz'
 "EasyGrep
 let g:EasyGrepMode = 2
 
@@ -758,11 +770,11 @@ let g:rbpt_colorpairs = [
 			\ ['red',         'firebrick3'],
 			\ ]
 
-"Arpeggio
-"call arpeggio#map('i', '', 0, 'jk','<esc>')
-
 "errormarker
 let g:errormarker_disablemappings = 1
 
 "vimwiki
-nmap <leader>tt <Plug>VimwikiToggleListItem
+let g:vimwiki_list = [{'path': '~/.vimwiki/', 'syntax': 'markdown'}]
+
+"let g:Powerline_dividers_override = [0x0e, '>', '<<', '<']
+"set laststatus=2   " Always show the statusline
