@@ -1,4 +1,3 @@
-"install vim-plug: curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 call plug#begin('~/.vim/plugged')
 
 Plug  'Lokaltog/vim-easymotion'
@@ -8,6 +7,9 @@ Plug  'ervandew/supertab'
 "Plug  'junegunn/vim-easy-align'
 Plug  'junegunn/fzf'
 Plug  'junegunn/fzf.vim'
+Plug  'mhinz/vim-grepper'
+Plug  '~/.vim/plugged/Conque-GDB' , {'on' : 'ConqueGdb'}
+Plug  'henrik/vim-indexed-search'
 
 Plug  'luochen1990/rainbow'
 "Plug  'majutsushi/tagbar' , {'on' : 'TagbarToggle' }
@@ -21,10 +23,18 @@ Plug  'tpope/vim-rsi'
 
 "Plug  'w0rp/ale'
 "Plug  'vim-syntastic/syntastic'
-"Plug   'neomake/neomake'
+Plug   'neomake/neomake'
 
+Plug  'mh21/errormarker.vim'
 Plug  'kshenoy/vim-signature'
 "Plug  'lyuts/vim-rtags'
+Plug  'cazador481/vim-systemverilog'
+Plug  'wellle/targets.vim'
+"Plug  'kana/vim-textobj-user'
+"Plug  'glts/vim-textobj-indblock'
+"Plug  'Julian/vim-textobj-variable-segment'
+"Plug  'beloglazov/vim-textobj-quotes'
+"Plug  'machakann/vim-textobj-functioncall'
 
 Plug  'chrisbra/vim-diff-enhanced'
 "Plug  'lambdalisue/vim-diffa'
@@ -40,24 +50,11 @@ Plug  'sjl/badwolf'
 Plug  'w0ng/vim-hybrid'
 
 " vim-scripts repos
-Plug  'vim-scripts/IndexedSearch'
 Plug  'vim-scripts/QuickBuf'
-Plug  'vim-scripts/VisIncr'
+"Plug  'vim-scripts/VisIncr'
 Plug  'vim-scripts/a.vim'
 Plug  'vim-scripts/cscope_macros.vim'
-Plug  'vim-scripts/errormarker.vim'
-"Plug  'vim-scripts/verilog_systemverilog_fix'
-Plug  'cazador481/vim-systemverilog'
-"Plug  'vim-scripts/textobj-user'
-Plug  'wellle/targets.vim'
-"Plug  'vim-scripts/Conque-GDB'
-"
-"Plug  'glts/vim-textobj-indblock'
-"Plug  'Julian/vim-textobj-variable-segment'
-"Plug  'beloglazov/vim-textobj-quotes'
-"Plug  'machakann/vim-textobj-functioncall'
 
-Plug  'mhinz/vim-grepper'
 
 call plug#end()
 
@@ -97,8 +94,7 @@ set bg=dark
 if(&t_Co == 88)
     colorscheme desertEx
 else
-    "colorscheme desertEx
-    colorscheme jellybeans
+    colorscheme desertEx
 endif
 
 "set highit cursor line
@@ -200,7 +196,7 @@ set wildmenu
 "Change buffer - without saving
 set hid
 
-nnoremap .. :ls<CR>:b<space>
+"nnoremap .. :ls<CR>:b<space>
 "nnoremap .. <c-e> :set nomre <Bar> :ls<Bar> :set more<CR>:b<space>
 
 "show matched bracket
@@ -379,46 +375,21 @@ let g:EasyMotion_keys=';abcdefghijklmnopqrstuvwzyz'
 "let g:EasyMotion_keys='asdfghjkl'
 
 "================================================================================
-"EasyGrep
-let g:EasyGrepMode = 2
-
-"================================================================================
 "grepper
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
-nmap <leader>b* :Grepper -buffer -tool ag -noprompt -cword<cr>
 
 nnoremap <leader>gs :Grepper -tool ag -side<cr>
 nnoremap <leader>*  :Grepper -tool ag -cword -noprompt<cr>
+nnoremap <leader>b* :Grepper -buffer -tool ag -noprompt -cword<cr>
 
 let g:grepper = {
     \ 'tools': ['ag', 'git', 'grep'],
     \ 'open':  1,
     \ 'jump':  0,
     \ }
-
-"================================================================================
-"ranbow 
-command Rainbow call rainbow_parentheses#activate()|call rainbow_parentheses#load('(',')')|call rainbow_parentheses#load('{','}')
-let g:rbpt_colorpairs = [
-			\ ['brown',       'RoyalBlue3'],
-			\ ['Darkblue',    'SeaGreen3'],
-			\ ['darkgreen',   'firebrick3'],
-			\ ['darkcyan',    'RoyalBlue3'],
-			\ ['darkred',     'SeaGreen3'],
-			\ ['darkmagenta', 'DarkOrchid3'],
-			\ ['brown',       'firebrick3'],
-			\ ['yellow',      'yellow'],
-			\ ['Darkblue',    'firebrick3'],
-			\ ['darkgreen',   'RoyalBlue3'],
-			\ ['darkcyan',    'SeaGreen3'],
-			\ ['darkred',     'DarkOrchid3'],
-			\ ['red',         'firebrick3'],
-			\ ]
-let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle"
-
 
 "================================================================================
 "errormarker
@@ -459,4 +430,10 @@ map ,. :Buffers<cr>
 map <leader>his :History<cr>
 map <leader>h: :History:<cr>
 
+"================================================================================
+"conque_gdb
+let g:ConqueGdb_GdbExe = '/u/tyshen/util/bin/gdb'
+let g:ConqueGdb_SaveHistory = 1
+
 set makeprg=/u/tyshen/util/bin/vgbuild.vim.sh
+
